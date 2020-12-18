@@ -22,6 +22,7 @@ on:
 
 jobs:
   openshift-ci:
+    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
     name: Build
     runs-on: ubuntu-20.04
 
@@ -60,6 +61,7 @@ jobs:
 
 
   openshift-cd-stage:
+    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
     name: CD-stage
     runs-on: ubuntu-20.04
     needs: openshift-ci
@@ -78,6 +80,7 @@ jobs:
 
 
   openshift-cd-prod:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     name: CD-prod
     runs-on: ubuntu-20.04
     # needs: openshift-ci
