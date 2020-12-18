@@ -1,4 +1,4 @@
-name: OpenShift
+name: OpenShift-Akbank
 
 
 env:
@@ -21,8 +21,8 @@ on:
     - main
 
 jobs:
-  openshift-ci-cd:
-    name: Build and deploy to OpenShift
+  openshift-ci:
+    name: Build
     runs-on: ubuntu-20.04
 
     steps:
@@ -38,15 +38,12 @@ jobs:
       run: |
         echo "TAG=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
 
-    # https://github.com/redhat-actions/buildah-build#readme
+
     - name: Build from Dockerfile
       uses: redhat-actions/buildah-build@v1
       with:
         image: ${{ env.APP_NAME }}
         tag: ${{ env.TAG }}
-        # If you don't have a dockerfile, see:
-        # https://github.com/redhat-actions/buildah-build#building-from-scratch
-        # Otherwise, point this to your Dockerfile relative to the repository root.
         dockerfiles: |
           ./Dockerfile
 
@@ -61,13 +58,13 @@ jobs:
         username: ${{ env.REGISTRY_USER }}
         password: ${{ env.REGISTRY_PASSWORD }}
 
-    # The path the image was pushed to is now stored in ${{ steps.push-to-registry.outputs.registry-path }}
 
-    # oc-login works on all platforms, but oc must be installed first.
-    # The GitHub Ubuntu runner already includes oc.
-    # Otherwise, https://github.com/redhat-actions/oc-installer#readme is available.
+  openshift-cd:
+    name: CD
+    runs-on: ubuntu-20.04
 
-    # https://github.com/redhat-actions/oc-login#readme
+    steps:
+    - uses: actions/checkout@v2
     - name: Log in to OpenShift
       uses: redhat-actions/oc-login@v1
       with:
@@ -75,3 +72,4 @@ jobs:
         openshift_token: ${{ env.OPENSHIFT_TOKEN }}
         insecure_skip_tls_verify: true
         namespace: ${{ env.OPENSHIFT_NAMESPACE }}
+
