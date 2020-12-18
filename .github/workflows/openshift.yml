@@ -91,4 +91,4 @@ jobs:
         namespace: ${{ env.OPENSHIFT_NAMESPACE }}
     - name: Helm
       run: |
-       helm upgrade -f ./charts/values.yaml reverseword ./charts --set environment=prod --set namespace=reverse-word-prod-altug --set tag=workshop -n helm-charts
+       helm upgrade -f ./charts/values.yaml reverseword ./charts --set environment=prod --set namespace=reverse-word-prod-altug --set tag=env.tag -n helm-charts
