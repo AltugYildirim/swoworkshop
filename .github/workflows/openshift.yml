@@ -33,9 +33,9 @@ jobs:
       run: |
         curl -sSL https://cli.kondukto.io | sh
 # SCA
-    - name: SCA
-      run: |
-        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t nancy -b dev 
+    # - name: SCA
+    #   run: |
+    #     ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t nancy -b dev 
 # SAST
     - name: SAST
       run: |
