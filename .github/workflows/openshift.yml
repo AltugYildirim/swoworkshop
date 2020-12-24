@@ -42,13 +42,6 @@ jobs:
         ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }} scan -p swoworkshop -t gosec -b dev 
 
 
-
-
-    - name: Determine tag
-      if: env.TAG == ''
-      run: |
-        echo "TAG=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
-
     - name: Unit Test
       run: |
         docker build -t reverseword_test:latest -f Dockerfile.test .
