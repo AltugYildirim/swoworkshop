@@ -98,7 +98,7 @@ jobs:
 # DAST
     - name: DAST
       run: |
-        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t owaspzap -b dev 
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t owaspzapheadless  -b dev 
 
 
   openshift-cd-prod:
