@@ -28,17 +28,31 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Determine app name
-      if: env.APP_NAME == ''
+# download Kondukto cli
+    - name: Download Kondukto CLI
       run: |
-        echo "APP_NAME=$(basename $PWD)" | tee -a $GITHUB_ENV
+        curl -sSL https://cli.kondukto.io | sh
+# SCA
+    - name: SCA
+      run: |
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t nancy -b dev 
+# SAST
+    - name: SAST
+      run: |
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }} scan -p swoworkshop -t gosec -b dev 
+
+
+
 
     - name: Determine tag
       if: env.TAG == ''
       run: |
         echo "TAG=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
 
+    - name: Unit Test
+      run: |
+        docker build -t reverseword_test:latest -f Dockerfile.test .
+        docker run reverseword_test:latest
 
     - name: Build from Dockerfile
       uses: redhat-actions/buildah-build@v1
@@ -47,6 +61,13 @@ jobs:
         tag: ${{ env.TAG }}
         dockerfiles: |
           ./Dockerfile
+
+# Vulnerability Check
+    - name: CS
+      run: |
+         ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }} scan -p swoworkshop -t trivy -b dev 
+
+
 
     # https://github.com/redhat-actions/push-to-registry#readme
     - name: Push to registry
@@ -77,6 +98,11 @@ jobs:
     - name: Helm
       run: |
        helm upgrade -f ./charts/values.yaml reverseword-stage ./charts --set environment=stage --set namespace=reverse-word-stage-altug --set tag=workshop -n helm-charts
+
+# DAST
+    - name: Download Kondukto CLI
+      run: |
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t owaspzap -b dev 
 
 
   openshift-cd-prod:
