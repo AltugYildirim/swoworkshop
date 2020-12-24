@@ -33,13 +33,14 @@ jobs:
       run: |
         curl -sSL https://cli.kondukto.io | sh
 # SCA
-    - name: Download Kondukto CLI
+    - name: SCA
       run: |
-        ./kdt --host https://demo5.kondukto.io --token WnNKZEt1MjBsTlRtWGExWkpseVpYazlCbmRpUlFVZFdTb0Z2SThsOUY2OTlQR1ZEbUxNRmZQOTFhZlRh list projects
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t nancy -b dev 
 # SAST
-    # - name: Download Kondukto CLI
-    #   run: |
-    #     curl -sSL https://cli.kondukto.io | sh
+    - name: SAST
+      run: |
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }} scan -p swoworkshop -t gosec -b dev 
+
 
 
 
@@ -62,9 +63,9 @@ jobs:
           ./Dockerfile
 
 # Vulnerability Check
-    # - name: Download Kondukto CLI
-    #   run: |
-    #     curl -sSL https://cli.kondukto.io | sh
+    - name: CS
+      run: |
+         ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }} scan -p swoworkshop -t trivy -b dev 
 
 
 
@@ -97,6 +98,11 @@ jobs:
     - name: Helm
       run: |
        helm upgrade -f ./charts/values.yaml reverseword-stage ./charts --set environment=stage --set namespace=reverse-word-stage-altug --set tag=workshop -n helm-charts
+
+# DAST
+    - name: Download Kondukto CLI
+      run: |
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t owaspzap -b dev 
 
 
   openshift-cd-prod:
