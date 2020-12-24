@@ -28,11 +28,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Determine app name
-      if: env.APP_NAME == ''
+# download Kondukto cli
+    - name: Download Kondukto CLI
       run: |
-        echo "APP_NAME=$(basename $PWD)" | tee -a $GITHUB_ENV
+        curl -sSL https://cli.kondukto.io | sh
+# SCA
+    - name: Download Kondukto CLI
+      run: |
+        ./kdt --host https://demo5.kondukto.io --token WnNKZEt1MjBsTlRtWGExWkpseVpYazlCbmRpUlFVZFdTb0Z2SThsOUY2OTlQR1ZEbUxNRmZQOTFhZlRh list projects
+# SAST
+    # - name: Download Kondukto CLI
+    #   run: |
+    #     curl -sSL https://cli.kondukto.io | sh
+
+
 
     - name: Determine tag
       if: env.TAG == ''
@@ -51,6 +60,13 @@ jobs:
         tag: ${{ env.TAG }}
         dockerfiles: |
           ./Dockerfile
+
+# Vulnerability Check
+    # - name: Download Kondukto CLI
+    #   run: |
+    #     curl -sSL https://cli.kondukto.io | sh
+
+
 
     # https://github.com/redhat-actions/push-to-registry#readme
     - name: Push to registry
