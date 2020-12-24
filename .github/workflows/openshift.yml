@@ -50,7 +50,7 @@ jobs:
     - name: Unit Test
       run: |
         docker images
-        docker run unittest:${{ env.TAG }}
+        buildah run unittest:${{ env.TAG }}
 
     - name: Build from Dockerfile
       uses: redhat-actions/buildah-build@v1
