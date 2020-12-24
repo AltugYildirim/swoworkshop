@@ -56,9 +56,9 @@ jobs:
           ./Dockerfile
 
 # Vulnerability Check
-    # - name: CS
-    #   run: |
-    #      ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }} scan -p swoworkshop -t trivy -b dev 
+    - name: CS
+      run: |
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }} scan -p swoworkshop -t trivy -b dev 
 
 
 
@@ -96,9 +96,9 @@ jobs:
       run: |
         curl -sSL https://cli.kondukto.io | sh
 # DAST
-    # - name: DAST
-    #   run: |
-    #     ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t owaspzap -b dev 
+    - name: DAST
+      run: |
+        ./kdt --host https://demo5.kondukto.io --token ${{ secrets.KONDUKTO }}  scan -p swoworkshop -t owaspzap -b dev 
 
 
   openshift-cd-prod:
