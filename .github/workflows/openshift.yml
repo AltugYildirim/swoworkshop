@@ -39,18 +39,10 @@ jobs:
       run: |
         echo "TAG=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
 
-    - name: Build for Test Container
-      uses: redhat-actions/buildah-build@v1
-      with:
-        image: unittest
-        tag: ${{ env.TAG }}
-        dockerfiles: |
-          ./Dockerfile.test
-
     - name: Unit Test
       run: |
-        docker images
-        buildah run unittest:${{ env.TAG }}
+        docker build -t reverseword_test:latest -f Dockerfile.test .
+        docker run unittest:latest
 
     - name: Build from Dockerfile
       uses: redhat-actions/buildah-build@v1
