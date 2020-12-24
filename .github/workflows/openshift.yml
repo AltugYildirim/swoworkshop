@@ -42,7 +42,7 @@ jobs:
     - name: Unit Test
       run: |
         docker build -t reverseword_test:latest -f Dockerfile.test .
-        docker run unittest:latest
+        docker run reverseword_test:latest
 
     - name: Build from Dockerfile
       uses: redhat-actions/buildah-build@v1
